@@ -32,7 +32,7 @@ entryPoints:
 certificatesResolvers:
   letsencrypt:
     acme:
-      email: mphrygien@astucom.com
+      email: email@domaine.com
       storage: /etc/traefik/acme/acme.json
       httpChallenge:
         entryPoint: web
