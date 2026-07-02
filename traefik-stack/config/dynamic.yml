@@ -1,4 +1,13 @@
 http:
+  routers:
+    catchall:
+      rule: "HostRegexp(`{host:.+}`)"
+      priority: 1
+      service: noop@internal
+      entryPoints:
+        - web
+        - websecure
+
   middlewares:
     secure-headers:
       headers:
