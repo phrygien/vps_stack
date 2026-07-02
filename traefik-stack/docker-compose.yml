@@ -1,0 +1,42 @@
+version: "3.9"
+
+networks:
+  traefik-public:
+    name: traefik-public
+    driver: bridge
+
+services:
+  traefik:
+    image: traefik:v3.1
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    environment:
+      - TZ=Europe/Paris
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./config/dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - ./acme:/etc/traefik/acme
+      - ./logs:/var/log/traefik
+
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.dashboard.rule=Host(`traefik.${DOMAIN}`)
+      - traefik.http.routers.dashboard.entrypoints=websecure
+      - traefik.http.routers.dashboard.tls.certresolver=letsencrypt
+      - traefik.http.routers.dashboard.service=api@internal
+      - traefik.http.routers.dashboard.middlewares=dashboard-auth
+
+      - traefik.http.middlewares.dashboard-auth.basicauth.users=${DASHBOARD_AUTH}
+
+    networks:
+      - traefik-public
