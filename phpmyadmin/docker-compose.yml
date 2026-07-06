@@ -7,6 +7,8 @@ networks:
     external: true
   cosmia-net:
     external: true
+  api-cosmia-net:
+    external: true
 
 services:
   phpmyadmin:
@@ -15,17 +17,18 @@ services:
     restart: unless-stopped
     environment:
       - TZ=Europe/Paris
-      - PMA_HOSTS=api-auctav-mysql, cosmia-mysql
-      - PMA_ABSOLUTE_URI=https://phpmyadmin.astucom.com/
+      - PMA_HOSTS=api-auctav-mysql,cosmia-mysql,mysql-api-cosmia
+      - PMA_ABSOLUTE_URI=https://phpadmin.astucom.com/
       - UPLOAD_LIMIT=64M
     networks:
       - traefik-public
       - api-auctav-net
       - cosmia-net
+      - api-cosmia-net
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
-      - traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.astucom.com`)
+      - traefik.http.routers.phpmyadmin.rule=Host(`phpadmin.astucom.com`)
       - traefik.http.routers.phpmyadmin.entrypoints=websecure
       - traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt
       - traefik.http.routers.phpmyadmin.middlewares=phpmyadmin-auth
