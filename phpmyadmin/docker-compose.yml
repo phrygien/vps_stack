@@ -9,6 +9,8 @@ networks:
     external: true
   api-cosmia-net:
     external: true
+  central-stock-net:
+    external: true
 
 services:
   phpmyadmin:
@@ -17,7 +19,7 @@ services:
     restart: unless-stopped
     environment:
       - TZ=Europe/Paris
-      - PMA_HOSTS=api-auctav-mysql,cosmia-mysql,mysql-api-cosmia
+      - PMA_HOSTS=api-auctav-mysql,cosmia-mysql,mysql-api-cosmia, central-stk-server
       - PMA_ABSOLUTE_URI=https://phpadmin.astucom.com/
       - UPLOAD_LIMIT=64M
     networks:
